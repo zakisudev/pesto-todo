@@ -20,6 +20,10 @@ const todoSchema = new mongoose.Schema(
       trim: true,
       minlength: 3,
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
   },
   {
     timestamps: true,

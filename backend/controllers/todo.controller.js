@@ -4,6 +4,11 @@ const Todo = require('../models/todo.model');
 // Create and Save a new Todo
 const createTodo = async (req, res) => {
   const { title, description, status } = req.body;
+
+  if (!req.user) {
+    return res.status(403).json({ message: 'Unauthorized', success: false });
+  }
+
   // Validate request
   if (!req.body.title || !req.body.description || !req.body.status) {
     return res
@@ -17,6 +22,7 @@ const createTodo = async (req, res) => {
       title,
       description,
       status,
+      userId: req.user?._id,
     });
 
     if (!todo) {
@@ -38,7 +44,9 @@ const getAllTodos = async (req, res) => {
   }
 
   try {
-    const todos = await Todo.find({ user: req.user?._id });
+    const todos = await Todo.find({ userId: req.user?._id }).sort({
+      createdAt: -1,
+    });
 
     if (!todos) {
       return res
@@ -65,7 +73,10 @@ const getTodo = async (req, res) => {
   }
 
   try {
-    const todo = await Todo.findById(todoId);
+    const todo = await Todo.findOne({
+      _id: todoId,
+      user: req.user?._id,
+    });
 
     if (!todo) {
       return res
@@ -81,7 +92,7 @@ const getTodo = async (req, res) => {
 
 // Update a todo identified by the id in the request
 const updateTodo = async (req, res) => {
-  const { title, description, status } = req.body;
+  const { status } = req.body;
   const todoId = req.params?.id;
 
   if (!req.user) {
@@ -92,15 +103,16 @@ const updateTodo = async (req, res) => {
     return res.status(404).json({ message: 'Invalid todo id', success: false });
   }
 
-  if (!req.body.title && !req.body.description && !req.body.status) {
+  if (!status) {
     return res
       .status(400)
-      .json({ message: 'Please fill at least one field', success: false });
+      .json({ message: 'Please change status', success: false });
   }
 
   try {
     const existingTodo = await Todo.findById({
       _id: todoId,
+      user: req.user?._id,
     });
 
     if (!existingTodo) {
@@ -109,20 +121,15 @@ const updateTodo = async (req, res) => {
         .json({ message: 'Todo not found', success: false });
     }
 
-    if (title) existingTodo.title = title || existingTodo.title;
-    if (description)
-      existingTodo.description = description || existingTodo.description;
-    if (status) existingTodo.status = status || existingTodo.status;
-
+    existingTodo.status = status;
     const updatedTodo = await existingTodo.save();
-
     if (!updatedTodo) {
       return res
-        .status(500)
-        .json({ message: 'Something went wrong', success: false });
+        .status(404)
+        .json({ message: 'Todo update failed', success: false });
     }
 
-    res.status(200).json({ updatedTodo, success: true });
+    res.status(200).json({ todo: updatedTodo, success: true });
   } catch (error) {
     res.status(500).json({ message: error.message, success: false });
   }
@@ -141,7 +148,10 @@ const deleteTodo = async (req, res) => {
   }
 
   try {
-    const todo = await Todo.findByIdAndRemove(todoId);
+    const todo = await Todo.findByIdAndDelete({
+      _id: todoId,
+      user: req.user?._id,
+    });
 
     if (!todo) {
       return res
