@@ -43,8 +43,6 @@ const register = async (req, res) => {
       password: await hashPassword(password),
     });
 
-    generateToken(res, user._id);
-
     res.status(201).json({
       _id: user._id,
       username: user.username,
