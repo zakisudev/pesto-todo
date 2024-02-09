@@ -5,6 +5,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/user.routes');
+const todoRoutes = require('./routes/todo.routes');
 
 connectDB();
 const app = express();
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // routes
 app.use('/api/users', userRoutes);
+app.use('/api/todos', todoRoutes);
 
 // app.use('/api/todos', require('./routes/productRoutes'));
 app.listen(port, () => {
