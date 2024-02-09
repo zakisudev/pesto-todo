@@ -13,9 +13,9 @@ const Header = () => {
   const [smSearch, setSmSearch] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const user = localStorage.getItem('userInfo')
-    ? JSON.parse(localStorage.getItem('userInfo'))
-    : {};
+  const user =
+    localStorage.getItem('userInfo') &&
+    JSON.parse(localStorage.getItem('userInfo'));
 
   const handleLogout = async () => {
     setError('');
@@ -53,12 +53,18 @@ const Header = () => {
     return () => clearTimeout(timer);
   }, [search]);
 
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
   return (
-    <nav className="flex justify-between items-center px-10 py-3 bg-gray-200 transition-all duration-300">
+    <nav className="flex justify-between items-center px-5 sm:px-10 py-3 bg-gray-200 transition-all duration-300">
       {smSearch ? (
         <div className="flex items-center mx-auto p-[2px]">
           <button
-            className="flex items-center justify-center md:hidden rounded-full p-1 bg-white"
+            className="flex items-center justify-center rounded-full p-1 bg-white"
             onClick={() => setSmSearch(false)}
           >
             <FaArrowLeft />
@@ -76,7 +82,7 @@ const Header = () => {
             to="/todos"
             className="flex items-center gap-2 bg-gray-600 text-white px-2 rounded"
           >
-            <h1 className="text-2xl font-bold">Pesto-todo</h1>
+            <h1 className="text-lg sm:text-2xl font-bold">Pesto-todo</h1>
           </Link>
           <form className="hidden md:flex items-center px-1 rounded-full focus:outline-gray-300">
             <InputComponent
@@ -100,7 +106,7 @@ const Header = () => {
                   <FaSearch className="text-gray-600 text-xl" />
                 </button>
                 <span className="text-gray-600 font-bold text-xl">
-                  {user?.username.charAt(0).toUpperCase() +
+                  {user?.username?.charAt(0)?.toUpperCase() +
                     user?.username?.slice(1)}
                 </span>
                 <button

@@ -23,7 +23,7 @@ const Login = () => {
       const res = await loginUser(userData);
       if (res?.success) {
         setLoading(false);
-        navigate('/todos', { replace: true });
+        navigate('/', { replace: true });
         toast.success('Logged in successfully');
         return;
       } else {
@@ -42,7 +42,7 @@ const Login = () => {
       ? JSON.parse(localStorage.getItem('userInfo'))
       : null;
     if (userInfo) {
-      navigate('/todos', { replace: true });
+      navigate('/', { replace: true });
     }
   }, [navigate]);
 
