@@ -4,7 +4,6 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Todos from './pages/Todos';
 import Register from './pages/Register';
@@ -17,9 +16,8 @@ const router = createBrowserRouter(
       <Route path="register" element={<Register />} />
       <Route path="login" element={<Login />} />
       <Route path="" element={<ProtectedRoute />}>
-        <Route path="todos" element={<Todos />} />
+        <Route index element={<Todos />} />
       </Route>
-      <Route path="*" element={<ToastContainer />} />
     </Route>
   )
 );
