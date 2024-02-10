@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
+import loader from '../assets/spinner.svg';
 
-const AddTodo = ({ handleAddTodo }) => {
+const AddTodo = ({ handleAddTodo, loading }) => {
   const [collapsed, setCollapsed] = useState(true);
   const [todo, setTodo] = useState({
     title: '',
@@ -82,15 +83,25 @@ const AddTodo = ({ handleAddTodo }) => {
           </select>
 
           <button
-            disabled={!todo.title || !todo.description || !todo.status}
+            disabled={
+              loading || !todo.title || !todo.description || !todo.status
+            }
             type="submit"
             className={`${
-              !todo.title || !todo.description || !todo.status
+              loading
                 ? 'cursor-not-allowed bg-gray-400 text-gray-500'
-                : 'cursor-pointer hover:bg-gray-700 bg-gray-500 text-white'
-            }   p-3 rounded transition-all duration-200 uppercase font-semibold`}
+                : 'cursor-pointer hover:bg-gray-700 bg-gray-600 text-white'
+            }   p-3 rounded transition-all duration-200 uppercase font-semibold text-lg`}
           >
-            Create
+            {loading ? (
+              <img
+                src={loader}
+                alt="loading"
+                className="w-7 h-7 bg-transparent mx-auto"
+              />
+            ) : (
+              'Add Todo'
+            )}
           </button>
         </form>
       )}

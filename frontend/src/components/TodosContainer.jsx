@@ -69,9 +69,9 @@ const TodosContainer = () => {
   }, [todos]);
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex justify-center items-center overflow-y-auto">
       <div className="flex flex-col sm:flex-row justify-center items-start mx-auto rounded w-[95%] md:w-[70%] bg-gray-200 shadow-inner shadow-gray-400">
-        <AddTodo handleAddTodo={handleAddTodo} />
+        <AddTodo handleAddTodo={handleAddTodo} loading={loading} />
 
         <div className="flex flex-col w-full sm:w-2/3 p-5">
           {error && <p className="text-red-500">{error}</p>}

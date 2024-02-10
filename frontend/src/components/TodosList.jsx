@@ -124,7 +124,7 @@ const TodosList = ({ todos, loading, setTodos }) => {
           todos?.map((todo) => (
             <li
               key={todo?._id}
-              className="flex flex-col sm:flex-row justify-between items-center p-3 border border-gray-400 rounded bg-white shadow-md"
+              className="flex flex-col sm:flex-row justify-between items-center gap-2 p-2 border border-gray-400 rounded bg-white shadow-md"
             >
               <div>
                 <h1 className="text-lg font-semibold">
