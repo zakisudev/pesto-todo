@@ -7,12 +7,13 @@ const connectDB = require('./config/db');
 const userRoutes = require('./routes/user.routes');
 const todoRoutes = require('./routes/todo.routes');
 
+// Connect to database
 connectDB();
+// Create an express application
 const app = express();
 
-// middleware
+// middlewares
 app.use(express.json());
-// app.use(express.bodyParser());
 app.use(cors());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));

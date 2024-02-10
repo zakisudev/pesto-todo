@@ -10,7 +10,9 @@ const {
   deleteTodo,
 } = require('../controllers/todo.controller');
 
+// Home routes
 router.route('/').get(protect, getAllTodos).post(protect, createTodo);
+// Single todo routes
 router
   .route('/:id')
   .get(protect, getTodo)

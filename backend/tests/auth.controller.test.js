@@ -1,5 +1,5 @@
-const { register, login } = require('../controllers/auth.controller');
 const User = require('../models/user.model');
+const { register, login } = require('../controllers/auth.controller');
 const { hashPassword, comparePassword } = require('../utils/hashPassword');
 const { generateToken } = require('../utils/generateToken');
 

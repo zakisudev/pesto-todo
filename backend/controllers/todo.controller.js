@@ -1,7 +1,13 @@
 const mongoose = require('mongoose');
 const Todo = require('../models/todo.model');
 
-// Create and Save a new Todo
+/**
+ * Creates a new todo.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the todo is created.
+ */
 const createTodo = async (req, res) => {
   const { title, description, status } = req.body;
 
@@ -37,34 +43,16 @@ const createTodo = async (req, res) => {
   }
 };
 
-// Retrieve and return all todos from the database.
+/**
+ * Get all todos for a user.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The response object with todos or error message.
+ */
 const getAllTodos = async (req, res) => {
-  const query = req.query.search;
   if (!req.user) {
     return res.status(403).json({ message: 'Unauthorized', success: false });
-  }
-
-  if (query) {
-    try {
-      const todos = await Todo.find({
-        userId: req.user?._id,
-        $text: { $search: query },
-      })
-        .sort({
-          createdAt: 'desc',
-        })
-        .exec();
-
-      if (!todos || todos.length === 0) {
-        return res
-          .status(404)
-          .json({ message: 'No todos found', success: false });
-      }
-
-      return res.status(200).json({ todos, success: true });
-    } catch (error) {
-      res.status(500).json({ message: error.message, success: false });
-    }
   }
 
   try {
@@ -86,7 +74,13 @@ const getAllTodos = async (req, res) => {
   }
 };
 
-// Find a single todo with an id
+/**
+ * Retrieves a single todo by its ID.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves with the retrieved todo or an error message.
+ */
 const getTodo = async (req, res) => {
   const todoId = req.params?.id;
 
@@ -116,7 +110,12 @@ const getTodo = async (req, res) => {
   }
 };
 
-// Update a todo identified by the id in the request
+/**
+ * Updates the status of a todo item.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves with the updated todo or an error message.
+ */
 const updateTodo = async (req, res) => {
   const { status } = req.body;
   const todoId = req.params?.id;
@@ -161,7 +160,13 @@ const updateTodo = async (req, res) => {
   }
 };
 
-// Delete a todo with the specified id in the request
+/**
+ * Deletes a todo by its ID.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} The response object.
+ */
 const deleteTodo = async (req, res) => {
   const todoId = req.params?.id;
 

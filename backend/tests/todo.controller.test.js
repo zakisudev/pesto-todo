@@ -112,7 +112,6 @@ describe('Todo Controller Tests', () => {
   });
 
   describe('getAllTodos', () => {
-    // Returns all todos for a valid user.
     it('should return all todos for a valid user', async () => {
       const req = { user: { _id: 'validUserId' } };
       const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
@@ -130,7 +129,6 @@ describe('Todo Controller Tests', () => {
       expect(res.json).toHaveBeenCalledWith({ todos, success: true });
     });
 
-    // Returns an empty array if user has no todos.
     it('should return an empty array if user has no todos', async () => {
       const req = { user: { _id: 'validUserId' } };
       const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
@@ -150,7 +148,6 @@ describe('Todo Controller Tests', () => {
       });
     });
 
-    // Returns todos sorted by createdAt in descending order.
     it('should return todos sorted by createdAt in descending order', async () => {
       const req = { user: { _id: 'validUserId' } };
       const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
@@ -171,7 +168,6 @@ describe('Todo Controller Tests', () => {
       expect(res.json).toHaveBeenCalledWith({ todos, success: true });
     });
 
-    // Returns an error message with status code 404 if no todos found.
     it('should return an error message with status code 404 if no todos found', async () => {
       const req = { user: { _id: 'validUserId' } };
       const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
@@ -191,7 +187,6 @@ describe('Todo Controller Tests', () => {
       });
     });
 
-    // Returns an error message with status code 403 if user is unauthorized.
     it('should return an error message with status code 403 if user is unauthorized', async () => {
       const req = { user: null };
       const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
@@ -205,7 +200,6 @@ describe('Todo Controller Tests', () => {
       });
     });
 
-    // Returns an error message with status code 500 for server errors.
     it('should return an error message with status code 500 for server errors', async () => {
       const req = { user: { _id: 'validUserId' } };
       const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
@@ -227,7 +221,6 @@ describe('Todo Controller Tests', () => {
   });
 
   describe('getTodo', () => {
-    // Returns a single todo with a valid id and authenticated user
     it('should return a 200 response with the requested todo', async () => {
       const req = {
         user: { _id: 'validUserId' },
@@ -275,7 +268,6 @@ describe('Todo Controller Tests', () => {
       });
     });
 
-    // Returns a 404 error message with a valid id and unauthenticated user
     it('should return a 403 error message with a valid id and unauthenticated user', async () => {
       const req = {
         params: { id: 'validId' },
@@ -295,7 +287,6 @@ describe('Todo Controller Tests', () => {
       });
     });
 
-    // Returns a 500 error message when an error occurs while finding the todo
     it('should return a 500 error message when an error occurs while finding the todo', async () => {
       const req = {
         params: { id: 'validId' },
@@ -317,7 +308,6 @@ describe('Todo Controller Tests', () => {
       });
     });
 
-    // Returns a 403 error message when there is no authenticated user
     it('should return a 403 error message when there is no authenticated user', async () => {
       const req = {
         params: { id: 'validId' },

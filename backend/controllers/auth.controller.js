@@ -2,7 +2,13 @@ const User = require('../models/user.model');
 const { hashPassword, comparePassword } = require('../utils/hashPassword');
 const { generateToken } = require('../utils/generateToken');
 
-// register user
+/**
+ * Registers a new user.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} The response object containing the user details or an error message.
+ */
 const register = async (req, res) => {
   const { username, email, password } = req.body;
 
@@ -54,7 +60,13 @@ const register = async (req, res) => {
   }
 };
 
-// login user
+/**
+ * Handles the login functionality.
+ *
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Promise<void>} - A promise that resolves when the login process is complete.
+ */
 const login = async (req, res) => {
   const { user, password } = req.body;
 
@@ -99,7 +111,12 @@ const login = async (req, res) => {
   }
 };
 
-// logout user
+/**
+ * Logout function that clears the JWT cookie and logs out the user.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ * @returns {Object} - The response object with a success message.
+ */
 const logout = (req, res) => {
   try {
     if (!req.user) {
