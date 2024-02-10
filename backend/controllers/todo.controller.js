@@ -39,16 +39,42 @@ const createTodo = async (req, res) => {
 
 // Retrieve and return all todos from the database.
 const getAllTodos = async (req, res) => {
+  const query = req.query.search;
   if (!req.user) {
     return res.status(403).json({ message: 'Unauthorized', success: false });
   }
 
-  try {
-    const todos = await Todo.find({ userId: req.user?._id }).sort({
-      createdAt: -1,
-    });
+  if (query) {
+    try {
+      const todos = await Todo.find({
+        userId: req.user?._id,
+        $text: { $search: query },
+      })
+        .sort({
+          createdAt: 'desc',
+        })
+        .exec();
 
-    if (!todos) {
+      if (!todos || todos.length === 0) {
+        return res
+          .status(404)
+          .json({ message: 'No todos found', success: false });
+      }
+
+      return res.status(200).json({ todos, success: true });
+    } catch (error) {
+      res.status(500).json({ message: error.message, success: false });
+    }
+  }
+
+  try {
+    const todos = await Todo.find({ userId: req.user?._id })
+      .sort({
+        createdAt: 'desc',
+      })
+      .exec();
+
+    if (!todos || todos.length === 0) {
       return res
         .status(404)
         .json({ message: 'No todos found', success: false });
@@ -75,8 +101,8 @@ const getTodo = async (req, res) => {
   try {
     const todo = await Todo.findOne({
       _id: todoId,
-      user: req.user?._id,
-    });
+      userId: req.user?._id,
+    }).exec();
 
     if (!todo) {
       return res
@@ -84,7 +110,7 @@ const getTodo = async (req, res) => {
         .json({ message: 'Todo not found', success: false });
     }
 
-    res.status(200).json({ todo, success: true });
+    return res.status(200).json({ todo, success: true });
   } catch (error) {
     res.status(500).json({ message: error.message, success: false });
   }
@@ -112,7 +138,7 @@ const updateTodo = async (req, res) => {
   try {
     const existingTodo = await Todo.findById({
       _id: todoId,
-      user: req.user?._id,
+      userId: req.user?._id,
     });
 
     if (!existingTodo) {
@@ -150,7 +176,7 @@ const deleteTodo = async (req, res) => {
   try {
     const todo = await Todo.findByIdAndDelete({
       _id: todoId,
-      user: req.user?._id,
+      userId: req.user?._id,
     });
 
     if (!todo) {
@@ -159,13 +185,13 @@ const deleteTodo = async (req, res) => {
         .json({ message: 'Todo not found', success: false });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       todoId: todo._id,
       message: 'Todo deleted successfully',
       success: true,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message, success: false });
+    res.status(500).json({ message: error?.message, success: false });
   }
 };
 
