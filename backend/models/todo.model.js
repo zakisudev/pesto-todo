@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+// Define the Todo schema
 const todoSchema = new mongoose.Schema(
   {
     title: {
